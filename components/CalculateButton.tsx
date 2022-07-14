@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { actions } from "../store";
 
 type Props = {
   type: string;
   display: string;
+  id: string;
 };
 
-function CalculateButton({ type, display }: Props) {
+function CalculateButton({ type, display, id }: Props) {
   let color = "";
   let position = "";
 
@@ -27,10 +30,20 @@ function CalculateButton({ type, display }: Props) {
       }
       color = "bg-number";
   }
+  const dispatch = useDispatch();
+
+  const handleInput = () => {
+    if (type === 'clear') {
+      return dispatch(actions.clear())
+    }
+    dispatch(actions.input(display))
+  }
 
   return (
     <div
-      className={`${color} ${position} border-black border  text-white hover:text-black hover:border-white  min-h-[80px] flex justify-center items-center cursor-pointer `} 
+      className={`${color} ${position} border-black border  text-white hover:text-black hover:border-white  min-h-[80px] flex justify-center items-center cursor-pointer `}
+      id={id}
+      onClick={handleInput}
     >
       <h1 className="text-2xl ">{display}</h1>
     </div>
