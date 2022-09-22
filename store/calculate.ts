@@ -45,23 +45,23 @@ export const calculate = (text: string): number => {
         switch (oparator) {
           case "+":
             result = num1 + num2;
-            allInt.unshift(result);
+            break;
           case "-":
             result = num1 - num2;
-            allInt.unshift(result);
+            break;
           case "x":
             result = num1 * num2;
-            allInt.unshift(result);
+            break;
           case "/":
             result = num1 / num2;
-            allInt.unshift(result);
+            break;
         }
+        allInt.unshift(result);
       }
     }
 
-    console.log('result ' , allInt[0])
-
-    return 1;
+    console.log("result ", allInt[0]);
+    return allInt[0] as number;
   }
 
   return 0;
