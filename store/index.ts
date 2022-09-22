@@ -3,7 +3,7 @@ import { calculate } from "./calculate";
 
 interface calculateState {
   mainDisplay: string | number;
-  subDisplay: string ;
+  subDisplay: string;
   result: number;
   limit: boolean;
 }
@@ -23,31 +23,31 @@ const calculateSlice = createSlice({
   reducers: {
     input(state, action) {
       if (state.mainDisplay === "0") {
+        // if start process
         state.mainDisplay = action.payload;
+        // equal user input
       } else {
         if (listOparator.includes(action.payload)) {
+          // check user input is oparator
           state.mainDisplay = action.payload;
         } else {
-          if (listOparator.includes(state.mainDisplay)) {
+          if (listOparator.includes(state.mainDisplay as string)) {
             state.mainDisplay = action.payload;
           } else if (action.payload === "=") {
-            state.result = calculate(state.subDisplay)
+            state.result = calculate(state.subDisplay);
             state.mainDisplay = state.result;
+            state.subDisplay = String(state.result);
+            return;
           } else {
             state.mainDisplay += action.payload;
           }
         }
       }
-
       state.subDisplay += action.payload;
-      if (state.result > 0) {
-        state.subDisplay += state.result;
-      }
     },
     clear(state) {
       state.mainDisplay = "0";
       state.subDisplay = "";
-
       state.result = 0;
       state.limit = false;
     },
