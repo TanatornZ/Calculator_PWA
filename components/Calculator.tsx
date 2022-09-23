@@ -17,12 +17,18 @@ function Calculator({}: Props) {
   const limit = useSelector((state: State) => state.limit);
 
   return (
-    <div className="min-w-[330px] border-black bg-black p-2">
+    <div className="min-w-[330px]  border-black bg-black p-2">
       <div className=" flex flex-col h-[80px] justify-center">
-        <h1 className="text-orange-300 text-right text-2xl transition-all">
+        <h1
+          className="text-orange-300 text-right text-2xl transition-all"
+          id="sub-display"
+        >
           {subDisplay}
         </h1>
-        <h1 className="text-white  text-right text-3xl transition-all">
+        <h1
+          className="text-white  text-right text-3xl transition-all"
+          id="main-display"
+        >
           {limit ? "Digit limit " : mainDisplay}
         </h1>
       </div>

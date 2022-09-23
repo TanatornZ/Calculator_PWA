@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { stat } from "fs";
 import { calculate } from "./calculate";
 
 interface calculateState {
@@ -37,6 +38,7 @@ const calculateSlice = createSlice({
             state.result = calculate(state.subDisplay);
             state.mainDisplay = state.result;
             state.subDisplay = String(state.result);
+            state.result = 0;
             return;
           } else {
             state.mainDisplay += action.payload;
