@@ -3,7 +3,7 @@ import { stat } from "fs";
 import { calculate } from "./calculate";
 
 interface calculateState {
-  mainDisplay: string | number;
+  mainDisplay: string;
   subDisplay: string;
   result: number;
   limit: boolean;
@@ -32,13 +32,21 @@ const calculateSlice = createSlice({
           // check user input is oparator
           state.mainDisplay = action.payload;
         } else {
+          if (state.mainDisplay.length > 10) {
+            state.mainDisplay = "Limit Digit";
+            return;
+          }
           if (listOparator.includes(state.mainDisplay as string)) {
             state.mainDisplay = action.payload;
           } else if (action.payload === "=") {
             state.result = calculate(state.subDisplay);
-            state.mainDisplay = state.result;
-            state.subDisplay = String(state.result);
-            state.result = 0;
+            if (state.result > 10000000000) {
+              state.mainDisplay = "Limit Digit";
+            } else {
+              state.mainDisplay = String(state.result);
+              state.subDisplay = String(state.result);
+              state.result = 0;
+            }
             return;
           } else {
             state.mainDisplay += action.payload;
