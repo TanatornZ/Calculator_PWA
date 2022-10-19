@@ -5,8 +5,8 @@ import CalculateButton from "./CalculateButton";
 type Props = {};
 
 interface State {
-  mainDisplay?: string;
-  subDisplay?: string;
+  mainDisplay: string;
+  subDisplay: string;
   limit?: boolean;
 }
 function Calculator({}: Props) {
@@ -16,6 +16,9 @@ function Calculator({}: Props) {
   const subDisplay = useSelector((state: State) => state.subDisplay);
   const limit = useSelector((state: State) => state.limit);
 
+  function numberWithCommas(x: string) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   return (
     <div className="min-w-[330px]  border-black bg-black p-2">
       <div className=" flex flex-col h-[80px] justify-center">
@@ -29,7 +32,7 @@ function Calculator({}: Props) {
           className="text-white  text-right text-3xl transition-all"
           id="main-display"
         >
-          {limit ? "Digit limit " : mainDisplay}
+          {limit ? "Digit limit " : numberWithCommas(mainDisplay)}
         </h1>
       </div>
       <div className="grid grid-cols-4 grid-flow-row mt-2 ">

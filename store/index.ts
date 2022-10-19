@@ -53,7 +53,21 @@ const calculateSlice = createSlice({
           }
         }
       }
-      state.subDisplay += action.payload;
+      if (
+        listOparator.includes(
+          state.subDisplay.charAt(state.subDisplay.length - 1) as string
+        )
+      ) {
+        if (listOparator.includes(action.payload)) {
+          console.log('test')
+          let newValue = state.subDisplay.slice(0,-1) + action.payload
+          state.subDisplay = newValue
+        } else {
+          state.subDisplay += action.payload;
+        }
+      } else {
+        state.subDisplay += action.payload;
+      }
     },
     clear(state) {
       state.mainDisplay = "0";
