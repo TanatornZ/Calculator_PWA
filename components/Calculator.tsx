@@ -20,22 +20,19 @@ function Calculator({}: Props) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   return (
-    <div className="min-w-[330px]  border-black bg-black p-2">
-      <div className=" flex flex-col h-[80px] justify-center">
+    <div className="min-w-[330px]  border-black bg-black p-3 rounded-md flex flex-col gap-3">
+      <div className=" flex flex-col h-[120px] justify-center bg-white text-black font-mono p-3">
         <h1
           className="text-orange-300 text-right text-2xl transition-all"
           id="sub-display"
         >
           {numberWithCommas(subDisplay)}
         </h1>
-        <h1
-          className="text-white  text-right text-3xl transition-all"
-          id="main-display"
-        >
+        <h1 className="  text-right text-3xl transition-all" id="main-display">
           {limit ? "Digit limit " : numberWithCommas(mainDisplay)}
         </h1>
       </div>
-      <div className="grid grid-cols-4 grid-flow-row mt-2 ">
+      <div className="grid grid-cols-4 gap-1 grid-flow-row mt-2 ">
         <CalculateButton type="clear" display="AC" id="clear" />
         <CalculateButton type="oparator" display="/" id="divide" />
         <CalculateButton type="oparator" display="x" id="multiply" />
