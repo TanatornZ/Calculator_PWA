@@ -33,15 +33,15 @@ function CalculateButton({ type, display, id }: Props) {
   const dispatch = useDispatch();
 
   const handleInput = () => {
-    if (type === 'clear') {
-      return dispatch(actions.clear())
+    if (type === "clear") {
+      return dispatch(actions.clear());
     }
-    dispatch(actions.input(display))
-  }
+    dispatch(actions.input(display));
+  };
 
   return (
     <div
-      className={`${color} ${position} border-black border  text-white hover:text-black hover:border-white  min-h-[80px] flex justify-center items-center cursor-pointer `}
+      className={`${color} ${position} border-black border  text-white hover:text-black hover:border-white  min-h-[80px] flex justify-center items-center cursor-pointer rounded-lg`}
       id={id}
       onClick={handleInput}
     >

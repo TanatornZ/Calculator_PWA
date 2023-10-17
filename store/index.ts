@@ -40,8 +40,9 @@ const calculateSlice = createSlice({
             state.mainDisplay = action.payload;
           } else if (action.payload === "=") {
             state.result = calculate(state.subDisplay);
-            if (state.result > 10000000000) {
+            if (state.result > 100000000) {
               state.mainDisplay = "Limit Digit";
+              state.subDisplay = "Limit Digit";
             } else {
               state.mainDisplay = String(state.result);
               state.subDisplay = String(state.result);
@@ -53,7 +54,21 @@ const calculateSlice = createSlice({
           }
         }
       }
-      state.subDisplay += action.payload;
+      if (
+        listOparator.includes(
+          state.subDisplay.charAt(state.subDisplay.length - 1) as string
+        )
+      ) {
+        if (listOparator.includes(action.payload)) {
+          let newValue = state.subDisplay.slice(0, -1) + action.payload;
+          state.subDisplay = newValue;
+        } else {
+          state.subDisplay += action.payload;
+        }
+      } else {
+        if (action.payload === "0" && state.subDisplay === "") return;
+        state.subDisplay += action.payload;
+      }
     },
     clear(state) {
       state.mainDisplay = "0";
