@@ -26,7 +26,7 @@ function Calculator({}: Props) {
           className="text-orange-300 text-right text-2xl transition-all"
           id="sub-display"
         >
-          {subDisplay}
+          {numberWithCommas(subDisplay)}
         </h1>
         <h1
           className="text-white  text-right text-3xl transition-all"
