@@ -36,7 +36,7 @@ const calculateSlice = createSlice({
         if (listOperator.includes(action.payload)) {
           state.mainDisplay = action.payload;
         } else {
-          if (state.mainDisplay.length > 10) {
+          if (state.mainDisplay.length > 18) {
             state.error = true;
             state.errorMessage = "Digital limit";
             return;
@@ -48,14 +48,9 @@ const calculateSlice = createSlice({
               return;
             }
             if (Number(calculate(state.subDisplay))) {
-              if (state.result.toString().length > 10) {
-                state.error = true;
-                state.errorMessage = "Digital limit";
-              } else {
-                state.result = calculate(state.subDisplay) as number;
-                state.mainDisplay = String(state.result);
-                state.subDisplay = "";
-              }
+              state.result = calculate(state.subDisplay) as number;
+              state.mainDisplay = String(state.result);
+              state.subDisplay = "";
             } else {
               if (calculate(state.subDisplay) === 0) {
                 state.result = 0;
@@ -88,8 +83,6 @@ const calculateSlice = createSlice({
         } else {
           if (action.payload === "=") {
             state.result = calculate(state.subDisplay) as number;
-
-            console.log("state.result => ", state.result);
             state.mainDisplay = state.result.toString();
             state.subDisplay = "";
             return;
@@ -98,14 +91,10 @@ const calculateSlice = createSlice({
         }
       } else {
         if (action.payload === "0" && state.subDisplay === "") return;
-        if (state.mainDisplay === "") {
-          state.subDisplay = action.payload;
+        if (state.subDisplay === "") {
+          state.subDisplay += `${state.result || ""}${action.payload}`;
         } else {
-          if (state.subDisplay === "") {
-            state.subDisplay += `${state.result || ""}${action.payload}`;
-          } else {
-            state.subDisplay += action.payload;
-          }
+          state.subDisplay += action.payload;
         }
       }
     },
