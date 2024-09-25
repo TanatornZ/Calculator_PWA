@@ -14,6 +14,11 @@ export const calculate = (text: string): number | string => {
     }
   };
 
+  // Handle case where input starts with an operator (assume 0 before it)
+  if (OPERATORS.includes(text[0]) && text[0] !== "-") {
+    numbers.push(0); // Add a starting number 0 if input begins with +, x, or /
+  }
+
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
 
@@ -58,7 +63,13 @@ export const calculate = (text: string): number | string => {
           break;
       }
       numbers.unshift(result);
+    } else {
+      numbers.unshift(num1 || 0);
     }
+  }
+
+  if (numbers[0].toString().length > 18) {
+    return "Error, have more number";
   }
 
   return numbers[0] as number;
