@@ -1,68 +1,65 @@
-const checkOparator = (text: string) => {
-  if (text.includes("+")) {
-    return "+";
-  } else if (text.includes("-")) {
-    return "-";
-  } else if (text.includes("x")) {
-    return "x";
-  } else if (text.includes("/")) {
-    return "/";
-  }
-};
+export const calculate = (text: string): number | string => {
+  const OPERATORS = ["+", "-", "/", "x"];
+  const numbers: number[] = [];
+  const operators = [];
+  let currentNumber = "";
+  let isNegative = false;
 
-export const calculate = (text: string): number => {
-  const oparator = ["+", "-", "/", "x"];
-  const allInt = [];
-  const allOparator = [];
-  let int = "";
-  //sparate number and oparator
+  // Helper to push current number to the array
+  const pushNumber = () => {
+    if (currentNumber) {
+      numbers.push(isNegative ? -Number(currentNumber) : Number(currentNumber));
+      currentNumber = "";
+      isNegative = false;
+    }
+  };
+
   for (let i = 0; i < text.length; i++) {
-    if (oparator.includes(text[i])) {
-      if (Number(int)) {
-        allInt.push(Number(int));
+    const char = text[i];
+
+    if (OPERATORS.includes(char)) {
+      if (char === "-" && (i === 0 || OPERATORS.includes(text[i - 1]))) {
+        isNegative = true;
+      } else {
+        pushNumber();
+        operators.push(char);
       }
-      allOparator.push(text[i]);
-      int = "";
     } else {
-      int += text[i];
+      currentNumber += char;
     }
   }
-  if (Number(int)) {
-    allInt.push(Number(int));
+
+  if (currentNumber) {
+    numbers.push(Number(currentNumber));
   }
-  console.log("int before ", allInt);
-  console.log("oparator before", allOparator);
 
-  //calculate
-  if (allInt.length - allOparator.length === 1) {
-    while (allInt.length !== 1) {
-      const num1 = allInt.shift();
-      const num2 = allInt.shift();
+  while (operators.length > 0) {
+    const num1 = numbers.shift();
+    const num2 = numbers.shift();
 
-      const oparator = allOparator.shift();
-      let result;
-      if (num1 && num2) {
-        switch (oparator) {
-          case "+":
-            result = num1 + num2;
-            break;
-          case "-":
-            result = num1 - num2;
-            break;
-          case "x":
-            result = num1 * num2;
-            break;
-          case "/":
-            result = num1 / num2;
-            break;
-        }
-        allInt.unshift(result);
+    const operator = operators.shift();
+    let result: number = 0;
+    if (num1 !== undefined && num2 !== undefined) {
+      switch (operator) {
+        case "+":
+          result = num1 + num2;
+          break;
+        case "-":
+          result = num1 - num2;
+          break;
+        case "x":
+          result = num1 * num2;
+          break;
+        case "/":
+          if (num2 === 0) {
+            return "Division by zero is not allowed.";
+          }
+          result = num1 / num2;
+          break;
       }
+      numbers.unshift(result);
     }
-
-    console.log("result ", allInt[0]);
-    return allInt[0] as number;
   }
 
-  return 0;
+  return numbers[0] as number;
 };

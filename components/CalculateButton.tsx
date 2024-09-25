@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { actions } from "../store";
 
@@ -21,8 +21,8 @@ function CalculateButton({ type, display, id }: Props) {
       color = "bg-clear";
       position = "col-span-2";
       break;
-    case "oparator":
-      color = "bg-oparator";
+    case "operator":
+      color = "bg-operator";
       break;
     default:
       if (display === "0") {

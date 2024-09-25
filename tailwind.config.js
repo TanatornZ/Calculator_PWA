@@ -9,7 +9,7 @@ module.exports = {
         body: "#C2C2D6",
         clear: "#AC3939",
         equal: "#004466",
-        oparator: "#666666",
+        operator: "#666666",
         number: "#4D4D4D",
       },
     },
