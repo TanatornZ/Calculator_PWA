@@ -1,80 +1,120 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { stat } from "fs";
 import { calculate } from "./calculate";
 
-interface calculateState {
+export interface calculateState {
   mainDisplay: string;
   subDisplay: string;
   result: number;
-  limit: boolean;
+  errorMessage: string;
+  error: boolean;
 }
 
 const initialState: calculateState = {
   mainDisplay: "0",
   subDisplay: "",
   result: 0,
-  limit: false,
+  errorMessage: "",
+  error: false,
 };
 
-const listOparator = ["x", "+", "-", "/"];
+const listOperator = ["x", "+", "-", "/"];
 
 const calculateSlice = createSlice({
   name: "calculate",
   initialState: initialState,
   reducers: {
     input(state, action) {
-      if (state.mainDisplay === "0") {
-        // if start process
+      if (state.error) {
+        return;
+      }
+      if (state.mainDisplay === "") {
+        if (listOperator.includes(action.payload)) {
+          return;
+        }
         state.mainDisplay = action.payload;
-        // equal user input
       } else {
-        if (listOparator.includes(action.payload)) {
-          // check user input is oparator
+        if (listOperator.includes(action.payload)) {
           state.mainDisplay = action.payload;
         } else {
           if (state.mainDisplay.length > 10) {
-            state.mainDisplay = "Limit Digit";
+            state.error = true;
+            state.errorMessage = "Digital limit";
             return;
           }
-          if (listOparator.includes(state.mainDisplay as string)) {
+          if (listOperator.includes(state.mainDisplay as string)) {
             state.mainDisplay = action.payload;
           } else if (action.payload === "=") {
-            state.result = calculate(state.subDisplay);
-            if (state.result > 100000000) {
-              state.mainDisplay = "Limit Digit";
-              state.subDisplay = "Limit Digit";
+            if (state.subDisplay === "") {
+              return;
+            }
+            if (Number(calculate(state.subDisplay))) {
+              if (state.result.toString().length > 10) {
+                state.error = true;
+                state.errorMessage = "Digital limit";
+              } else {
+                state.result = calculate(state.subDisplay) as number;
+                state.mainDisplay = String(state.result);
+                state.subDisplay = "";
+              }
             } else {
-              state.mainDisplay = String(state.result);
-              state.subDisplay = String(state.result);
-              state.result = 0;
+              if (calculate(state.subDisplay) === 0) {
+                state.result = 0;
+                state.mainDisplay = String(state.result);
+                state.subDisplay = "";
+              } else {
+                state.error = true;
+                state.errorMessage = calculate(state.subDisplay) as string;
+              }
             }
             return;
           } else {
-            state.mainDisplay += action.payload;
+            if (state.subDisplay === "") {
+              state.mainDisplay = action.payload;
+              state.result = 0;
+            } else {
+              state.mainDisplay += action.payload;
+            }
           }
         }
       }
       if (
-        listOparator.includes(
+        listOperator.includes(
           state.subDisplay.charAt(state.subDisplay.length - 1) as string
         )
       ) {
-        if (listOparator.includes(action.payload)) {
+        if (listOperator.includes(action.payload)) {
           let newValue = state.subDisplay.slice(0, -1) + action.payload;
           state.subDisplay = newValue;
         } else {
+          if (action.payload === "=") {
+            state.result = calculate(state.subDisplay) as number;
+
+            console.log("state.result => ", state.result);
+            state.mainDisplay = state.result.toString();
+            state.subDisplay = "";
+            return;
+          }
           state.subDisplay += action.payload;
         }
       } else {
         if (action.payload === "0" && state.subDisplay === "") return;
-        state.subDisplay += action.payload;
+        if (state.mainDisplay === "") {
+          state.subDisplay = action.payload;
+        } else {
+          if (state.subDisplay === "") {
+            state.subDisplay += `${state.result || ""}${action.payload}`;
+          } else {
+            state.subDisplay += action.payload;
+          }
+        }
       }
     },
     clear(state) {
       state.mainDisplay = "0";
       state.subDisplay = "";
       state.result = 0;
-      state.limit = false;
+      state.errorMessage = "";
+      state.error = false;
     },
   },
 });
